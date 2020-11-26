@@ -1,0 +1,21 @@
+{
+    "name": "iscxy/laravel-dingtalk",
+    "description": "Dingtalk for laravel",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "iscxy",
+            "email": "iscxy@hotmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Iscxy\\Dingtalk\\": "src"
+        }
+    },
+    "require": {
+        "guzzlehttp/guzzle": "^7.2"
+    }
+}
