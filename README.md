@@ -1,3 +1,3 @@
-# laravel-dingtalk
+# laravel-dingtalk 中文说明
 
-dingtalk for laravel
+用于laravel的《钉钉》应用扩展包。
