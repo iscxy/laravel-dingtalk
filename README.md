@@ -1,3 +1,3 @@
 # laravel-dingtalk
 
-dingtalk for laravel
+dingtalk for laravel.
