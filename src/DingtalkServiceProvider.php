@@ -15,8 +15,8 @@ class DingtalkServiceProvider extends ServiceProvider
      */
     public function register()
     {
-      $this->app->singleton(Weather::class, function(){
-            return new Dingtalk(config('dingtalk.configtype'));
+      $this->app->singleton(Dingtalk::class, function(){
+            return new Dingtalk();
         });
 
         $this->app->alias(Dingtalk::class, 'dingtalk');
