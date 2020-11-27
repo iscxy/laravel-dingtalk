@@ -15,6 +15,11 @@
             "Iscxy\\Dingtalk\\": "./src"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Iscxy\\Dingtalk\\": "./tests"
+        }
+    },
     "require": {
         "guzzlehttp/guzzle": "^7",
         "laravel/framework": "^8"
