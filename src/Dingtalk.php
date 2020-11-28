@@ -15,8 +15,8 @@ class Dingtalk
     {
         if (empty($appkey)) {
             return response()->json([
-                'errCode' => 101101,
-                // 'errMsg' => Lang::get('dingtalk_errcode.101101'),
+                'errCode' => 210001,
+                'errMsg' => '缺少AppKey',
                 ]);
         } else {
             return "getAccessToken";
