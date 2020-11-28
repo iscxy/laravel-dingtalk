@@ -14,13 +14,13 @@ class Dingtalk
     public function getAccessToken($appkey = '')
     {
         if (empty($appkey)) {
-            return response()->json([
+            return json_encode([
                 'errCode' => 210001,
                 'errMsg' => '缺少AppKey',
                 ]);
         } else {
-            if (Cache::has('AccessToken_'.$appkey)) {
-                return Cache::get('AccessToken_'.$appkey);
+            if (Cache::has('Dingtalk_AccessToken_'.$appkey)) {
+                return Cache::get('Dingtalk_AccessToken_'.$appkey);
             } else {
                 return "get new AccessToken";
             }
