@@ -16,8 +16,8 @@ class CreateSystemConfigTable extends Migration
         $tableNames = config('dingtalk.database.dingtalk_database_table');
 
         Schema::create($tableNames, function (Blueprint $table) {
-            $table->string('group')->comment('配置分组');
-            $table->string('key')->comment('键名');
+            $table->string('group');
+            $table->string('key');
             $table->string('value');
             $table->index(['group', 'key']);
         });
