@@ -2,8 +2,10 @@
 
 namespace Iscxy\Dingtalk;
 
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
+
+
+// use Illuminate\Support\Facades\Cache;
+// use Illuminate\Support\Facades\Http;
 
 
 class Dingtalk
@@ -11,7 +13,14 @@ class Dingtalk
     
     public function getAccessToken($appkey = '')
     {
-        return "getAccessToken";
+        if (empty($appkey)) {
+            return response()->json([
+                'errCode' => 101101,
+                // 'errMsg' => Lang::get('dingtalk_errcode.101101'),
+                ]);
+        } else {
+            return "getAccessToken";
+        }
     }
 
 }

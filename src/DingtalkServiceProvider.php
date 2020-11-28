@@ -29,11 +29,8 @@ class DingtalkServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // $this->loadViewsFrom(__DIR__.'/views', 'dingtalk');
-
-        $this->publishes([
+         $this->publishes([
             __DIR__.'/config/dingtalk.php' => config_path('dingtalk.php'),
-            // __DIR__.'/views' => resource_path('views/vendor/dingtalk'),
             __DIR__.'/migrations' => database_path('migrations'),
         ]);
     }
