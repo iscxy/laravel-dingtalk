@@ -28,7 +28,7 @@ class Dingtalk
                 $response = Http::get('https://oapi.dingtalk.com/gettoken?appkey='. $appkey .'&appsecret='. $appsecret);
                 if ($response->successful()) {
 
-                    dd($response);
+                    return  $response->json();
                     
                 } else {
                     return json_encode([
