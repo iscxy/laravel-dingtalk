@@ -25,7 +25,7 @@ class Dingtalk
             if ( Cache::has('Dingtalk_AccessToken_'.$appkey) ) {
                 return Cache::get('Dingtalk_AccessToken_'.$appkey);
             } else {
-                $response = Http::get('https://oapi.dingtalk.com/gettoken?appkey='. $appkey .'&appsecret='. $appsecret)->json();
+                $response = Http::get('https://oapi.dingtalk.com/gettoken?appkey='. $appkey .'&appsecret='. $appsecret);
                 if ($response->successful()) {
 
                     dd($response);
