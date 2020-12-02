@@ -11,18 +11,14 @@ class Dingtalk
     
     public function getAccessToken($appkey = '',$appsecret='')
     {
-        if ( empty($appkey) ) {
+        if ( empty($appkey) || empty($appsecret) ) {
             return json_encode([
                 'errCode' => 210001,
-                'errMsg' => '缺少AppKey',
-                ]);
-        } elseif( empty($appsecret) ) {
-            return json_encode([
-                'errCode' => 210002,
-                'errMsg' => '缺少AppSecret',
+                'errMsg' => '缺少AppKey或AppSecret',
                 ]);
         }else {
             if ( Cache::has('Dingtalk_AccessToken_'.$appkey) ) {
+                //缺少进一步数据处理
                 return Cache::get('Dingtalk_AccessToken_'.$appkey);
             } else {
                 $response = Http::get('https://oapi.dingtalk.com/gettoken?appkey='. $appkey .'&appsecret='. $appsecret);
