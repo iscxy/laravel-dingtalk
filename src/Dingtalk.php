@@ -50,7 +50,7 @@ class Dingtalk
                                         }
                                 } else {
                                     # 钉钉全局错误代码
-                                    return json_encode(['errCode' => 'dtcode_'.$rsl->errcode,'errMsg' => $rsl->errmsg,]);
+                                    return json_encode(['errCode' => 'dtcode_'.$rsl['errcode'],'errMsg' => $rsl['errmsg'],]);
                                 }
                             } else {
                                 return json_encode(['errCode' => 210003,'errMsg' => '返回数据中缺少errcode键名',]);
