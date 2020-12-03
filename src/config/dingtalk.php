@@ -12,6 +12,7 @@ return [
     /*格式： 'appkey' => 'appsecret', */
     'config' => [
         'dingfrnzjsaegbrkitfb' => '-vPzc1m9YXPS8-uucOHT0i7WwVC689h606T74KVp39smIIoqwsabyrXN2tnzy-HZ',
+        'dingfrnzjsae1111' => '-vPzc1m9YXPS8-uucOHT0i7WwVC683223Vp39smIIoqwsabyrXN2tnzy-HZ',
     ],
 
     'database' => [
