@@ -8,9 +8,10 @@ return [
      */
     'type' => env('dingtalk_config_type', 'config'),
 
+
+    /*格式： 'appkey' => 'appsecret', */
     'config' => [
-        'appkey' => env('dingtalk_appkey', ''),
-        'appsecret' => env('dingtalk_appsecret', ''),
+        'dingfrnzjsaegbrkitfb' => '-vPzc1m9YXPS8-uucOHT0i7WwVC689h606T74KVp39smIIoqwsabyrXN2tnzy-HZ',
     ],
 
     'database' => [
