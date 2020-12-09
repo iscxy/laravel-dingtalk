@@ -9,9 +9,6 @@ use Monolog\Handler\StreamHandler;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Log;
-
-
 
 // use Illuminate\Support\Facades\DB;
 
@@ -64,8 +61,17 @@ class Dingtalk
             if (empty($appkey)) {
                 //刷新所有AccessToken
                 foreach ($keySecret['lists'] as $appkey => $appsecret) {
-                    $this->Monolog->ERROR('刷新全部AccessToken');
-                    $this->refreshAccessToken($appkey,$appsecret);
+                    if (Cache::has('Dingtalk_AccessToken_'.$appkey)) {
+                        $rs = Cache::get('Dingtalk_AccessToken_'.$appkey);
+                        if ( $rs['expires'] > time() + 600 ) {
+                            return $rs;
+                        } else {
+                            return $this->refreshAccessToken($appkey,$appsecret);
+                        }
+                    } else {
+                        // $this->Monolog->ERROR('没有AccessToken缓存，刷新2');//-------------------------------------------------------------写入日志
+                        return $this->refreshAccessToken($appkey,$appsecret);
+                    }
                 }
             } else {
                 if (array_key_exists($appkey, $keySecret['lists'])) {
