@@ -2,12 +2,25 @@
 
 namespace Iscxy\Dingtalk;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ConnectException;
+
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 
 class DtDepartment
 {
+    protected $httpClient;
+    protected $appkey;
 
+    public function __construct()
+    {
+        $this->httpClient = new Client([
+            'timeout'  => 5.0,
+            'verify' => false,
+        ]);
+        $this->appkey = 'dingnz73k5e0j2zp9lrz';
+    }
 
     /**
      * 
