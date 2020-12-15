@@ -37,8 +37,8 @@ class Dingtalk
      */
     public function getAccessToken($appkey)
     {
-        if (Cache::has('Dingtalk_AccessToken_'.$appkey)) {
-            $rs = Cache::get('Dingtalk_AccessToken_'.$appkey);
+        if (Cache::has('DingTalk_AccessToken_'.$appkey)) {
+            $rs = Cache::get('DingTalk_AccessToken_'.$appkey);
             if ( $rs['expires'] > time()+5 ) {
                 return $rs;
             } else {
@@ -61,8 +61,8 @@ class Dingtalk
             if (empty($appkey)) {
                 //刷新所有AccessToken
                 foreach ($keySecret['lists'] as $appkey => $appsecret) {
-                    if (Cache::has('Dingtalk_AccessToken_'.$appkey)) {
-                        $rs = Cache::get('Dingtalk_AccessToken_'.$appkey);
+                    if (Cache::has('DingTalk_AccessToken_'.$appkey)) {
+                        $rs = Cache::get('DingTalk_AccessToken_'.$appkey);
                         if ( $rs['expires'] <= time() ) {
                             return $this->refreshAccessToken($appkey,$appsecret);
                         }
@@ -99,12 +99,12 @@ class Dingtalk
                 if (  array_key_exists('errcode', $getAT) ) {
                     if ( $getAT['errcode'] == 0 ) {
                         $accesstoken = [
-                            'errcode' => $getAT['errcode'],
+                            'errcode' => 'DT_'.$getAT['errcode'],
                             'errmsg' => $getAT['errmsg'],
                             'accesstoken' => $getAT['access_token'],
                             'expires' => time() + (int)$getAT['expires_in'],
                         ];
-                        if ( Cache::forever('Dingtalk_AccessToken_'.$appkey, $accesstoken) ) {
+                        if ( Cache::forever('DingTalk_AccessToken_'.$appkey, $accesstoken) ) {
                             return $accesstoken;
                         } else {
                             return ['errcode' => 200002,'errmsg' => '将AccessAoken写入Cache缓存失败'];
