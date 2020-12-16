@@ -9,8 +9,8 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 
 /**
- * 通讯录管理
- * 文档网址：https://ding-doc.dingtalk.com/document#/org-dev-guide/address-book-permissions
+ * 员工管理
+ * 文档网址：https://ding-doc.dingtalk.com/document#/org-dev-guide/create-a-user-v2
  */
 class DtEmployees
 {

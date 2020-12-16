@@ -8,30 +8,25 @@ use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 
+
+/**
+ * 部门管理
+ * 文档网址：https://ding-doc.dingtalk.com/document#/org-dev-guide/create-a-department-v2
+ */
 class DtDepartment
 {
     protected $httpClient;
-    protected $appkey;
+    protected $accessToken;
+    protected $apiurl;
 
-    public function __construct()
+    public function __construct($accesstoken)
     {
         $this->httpClient = new Client([
             'timeout'  => 5.0,
             'verify' => false,
         ]);
-        $this->appkey = 'dingnz73k5e0j2zp9lrz';
-    }
-
-    /**
-     * 
-     * @return array   ['errcode','errmsg', 'accesstoken' => 'e6509af20e5f3f9f813f6fe35c990add', 'expires' => 1607910603]
-     */
-    public function getAccessToken()
-    {
-        if (Cache::has('DingTalk_AccessToken_'.$this->appkey)) {
-            $rs = Cache::get('DingTalk_AccessToken_'.$this->appkey);
-            return $rs;
-        }
+        $this->apiurl = 'https://oapi.dingtalk.com/topapi/v2';
+        $this->accessToken = $accesstoken;
     }
 
     /**
@@ -41,12 +36,7 @@ class DtDepartment
      */
     public function deptCreate(array $data)
     {
-        $token = $this->getAccessToken();
-        if ( is_array($token) && array_key_exists('errcode',$token) && $token['errcode'] == 'DT_0' ) {
-            return $this->httpPost('https://oapi.dingtalk.com/topapi/v2/department/create?access_token='.$token['accesstoken'],$data);
-        } else {
-            return $token;
-        }
+        return $this->httpPost($this->apiurl.'/department/create?access_token='.$this->accessToken,$data);
     }
 
     /**
@@ -56,12 +46,7 @@ class DtDepartment
      */
     public function deptUpdate(array $data)
     {
-        $token = $this->getAccessToken();
-        if ( is_array($token) && array_key_exists('errcode',$token) && $token['errcode'] == 'DT_0' ) {
-            return $this->httpPost('https://oapi.dingtalk.com/topapi/v2/department/update?access_token='.$token['accesstoken'],$data);
-        } else {
-            return $token;
-        }
+        return $this->httpPost($this->apiurl.'/department/update?access_token='.$this->accessToken,$data);
     }
 
     /**
@@ -71,14 +56,9 @@ class DtDepartment
      */
     public function deptDelete(string $dept_id)
     {
-        $token = $this->getAccessToken();
-        if ( is_array($token) && array_key_exists('errcode',$token) && $token['errcode'] == 'DT_0' ) {
-            return $this->httpPost('https://oapi.dingtalk.com/topapi/v2/department/update?access_token='.$token['accesstoken'],[
-                'dept_id' => $dept_id,
-            ]);
-        } else {
-            return $token;
-        }
+        return $this->httpPost($this->apiurl.'/department/update?access_token='.$this->accessToken,[
+            'dept_id' => $dept_id,
+        ]);
     }
 
     /**
@@ -86,17 +66,12 @@ class DtDepartment
      * @param   string  $dept_id    部门ID
      * @return  array               ['errcode', 'errmsg', 'request_id', 'result'=>[...]]
      */
-    public function deptGetById(string $dept_id)
+    public function deptGetById(int $dept_id)
     {
-        $token = $this->getAccessToken();
-        if ( is_array($token) && array_key_exists('errcode',$token) && $token['errcode'] == 'DT_0' ) {
-            return $this->httpPost('https://oapi.dingtalk.com/topapi/v2/user/get?access_token='.$token['accesstoken'],[
-                "language" => ( Config::get('app.locale') == "zh_CN" ) ? "zh_CN" : "en_US" ,
-                "dept_id" => $dept_id,
-            ]);
-        } else {
-            return $token;
-        }
+        return $this->httpPost($this->apiurl.'/department/get?access_token='.$this->accessToken,[
+            "language" => ( Config::get('app.locale') == "zh_CN" ) ? "zh_CN" : "en_US" ,
+            "dept_id" => $dept_id,
+        ]);
     }
 
     /**
@@ -106,15 +81,10 @@ class DtDepartment
      */
     public function deptList(string $dept_id)
     {
-        $token = $this->getAccessToken();
-        if ( is_array($token) && array_key_exists('errcode',$token) && $token['errcode'] == 'DT_0' ) {
-            return $this->httpPost('https://oapi.dingtalk.com/topapi/v2/department/listsub?access_token='.$token['accesstoken'],[
-                "language" => ( Config::get('app.locale') == "zh_CN" ) ? "zh_CN" : "en_US" ,
-                "dept_id" => $dept_id,
-            ]);
-        } else {
-            return $token;
-        }
+        return $this->httpPost($this->apiurl.'/department/listsub?access_token='.$this->accessToken,[
+            "language" => ( Config::get('app.locale') == "zh_CN" ) ? "zh_CN" : "en_US" ,
+            "dept_id" => $dept_id,
+        ]);
     }
 
     /**
@@ -126,7 +96,7 @@ class DtDepartment
     {
         $token = $this->getAccessToken();
         if ( is_array($token) && array_key_exists('errcode',$token) && $token['errcode'] == 'DT_0' ) {
-            return $this->httpPost('https://oapi.dingtalk.com/topapi/v2/department/listsubid?access_token='.$token['accesstoken'],[
+            return $this->httpPost($this->apiurl.'/department/listsubid?access_token='.$this->accessToken,[
                 "dept_id" => $dept_id,
             ]);
         } else {
@@ -143,7 +113,7 @@ class DtDepartment
     {
         $token = $this->getAccessToken();
         if ( is_array($token) && array_key_exists('errcode',$token) && $token['errcode'] == 'DT_0' ) {
-            return $this->httpPost('https://oapi.dingtalk.com/topapi/v2/department/listparentbyuser?access_token='.$token['accesstoken'],[
+            return $this->httpPost($this->apiurl.'/department/listparentbyuser?access_token='.$this->accessToken,[
                 "userid" => $userid,
             ]);
         } else {
@@ -160,11 +130,46 @@ class DtDepartment
     {
         $token = $this->getAccessToken();
         if ( is_array($token) && array_key_exists('errcode',$token) && $token['errcode'] == 'DT_0' ) {
-            return $this->httpPost('https://oapi.dingtalk.com/topapi/v2/department/listparentbydept?access_token='.$token['accesstoken'],[
+            return $this->httpPost($this->apiurl.'/department/listparentbydept?access_token='.$this->accessToken,[
                 "dept_id" => $dept_id,
             ]);
         } else {
             return $token;
+        }
+    }
+
+    /**
+     * GET请求
+     * @param   string  $url    请求地址
+     * @return  array   ['errcode','errmsg', ...]
+     */
+    public function httpGet(string $url)
+    {
+        try {
+            $rs = $this->httpClient->request('GET', $url);
+            $rsa = json_decode($rs->getBody()->getContents(),true);
+            $rsa['errcode'] = 'DT_'.$rsa['errcode'];
+            return $rsa;
+        } catch (ConnectException $e) {
+            return ['errcode' => 200001,'errmsg' => 'Http请求错误:-> '.substr($e->getMessage(),0,strpos($e->getMessage()," (")),];
+        }
+    }
+
+    /**
+     * POST请求
+     * @param   string  $url    请求地址
+     * @param   array   $data   请求数据
+     * @return  array   ['errcode','errmsg', ...]
+     */
+    public function httpPost(string $url,array $data = [])
+    {
+        try {
+            $rs = $this->httpClient->request('POST', $url, ['form_params' => $data]);
+            $rsa = json_decode($rs->getBody()->getContents(),true);
+            $rsa['errcode'] = 'DT_'.$rsa['errcode'];
+            return $rsa;
+        } catch (ConnectException $e) {
+            return ['errcode' => 200001,'errmsg' => 'Http请求错误:-> '.substr($e->getMessage(),0,strpos($e->getMessage()," (")),];
         }
     }
 }
