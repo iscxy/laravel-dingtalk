@@ -1,71 +1,9 @@
 <?php
 
-namespace Iscxy\Dingtalk;
-
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ConnectException;
-
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Config;
-
-/**
- * 员工管理
- * 文档网址：https://ding-doc.dingtalk.com/document#/org-dev-guide/create-a-user-v2
- */
 class DtEmployees
 {
-    protected $httpClient;
-    protected $appkey;
 
-    public function __construct()
-    {
-        $this->httpClient = new Client([
-            'timeout'  => 5.0,
-            'verify' => false,
-        ]);
-        $this->appkey = 'dingnz73k5e0j2zp9lrz';
-    }
 
-    /**
-     * 
-     * @return array   ['errcode','errmsg', 'accesstoken' => 'e6509af20e5f3f9f813f6fe35c990add', 'expires' => 1607910603]
-     */
-    public function getAccessToken()
-    {
-        if (Cache::has('DingTalk_AccessToken_'.$this->appkey)) {
-            $rs = Cache::get('DingTalk_AccessToken_'.$this->appkey);
-            return $rs;
-        }
-    }
-
-    /**
-     * 获取通讯录权限范围
-     * @return array   ['errcode','errmsg', 'auth_user_field' => [...], 'auth_org_scopes' => ['authed_user' => [...], 'authed_dept' => [...]]]
-     */
-    public function userAuthScopes()
-    {   
-        $token = $this->getAccessToken();
-        if ( is_array($token) && array_key_exists('errcode',$token) && $token['errcode'] == 'DT_0' ) {
-            return $this->httpGet('https://oapi.dingtalk.com/auth/scopes?access_token='.$token['accesstoken']);
-        } else {
-            return $token;
-        }
-    }
-
-    /**
-     * 新增员工
-     * @param   array   $data       员工信息
-     * @return  array               ['errcode', 'errmsg', "request_id", "result"=> ['userid' => '...']]
-     */
-    public function userCreate(array $data)
-    {
-        $token = $this->getAccessToken();
-        if ( is_array($token) && array_key_exists('errcode',$token) && $token['errcode'] == 'DT_0' ) {
-            return $this->httpPost('https://oapi.dingtalk.com/topapi/v2/user/create?access_token='.$token['accesstoken'],$data);
-        } else {
-            return $token;
-        }
-    }
 
     /**
      * 删除员工
