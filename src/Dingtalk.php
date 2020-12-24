@@ -7,7 +7,6 @@ use GuzzleHttp\Exception\ConnectException;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
-use Iscxy\Dingtalk\Exceptions\DingTalkException;
 
 class Dingtalk
 {
@@ -24,8 +23,7 @@ class Dingtalk
 
 #region AccessToken
 
-    /**
-     * 刷新单个AccessToken
+    /** 刷新单个AccessToken
      * @param   string  $appkey     应用的唯一标识。
      * @param   string  $appsecret  应用的密钥。
      * @return  array               ["errcode", "errmsg", "accesstoken"=>"...", "expires"=>...]
@@ -58,55 +56,44 @@ class Dingtalk
                     return ['errcode' => 210003,'errmsg' => '返回数据中缺少errcode键名',];
                 }
             } catch (ConnectException $e) {
-                return ['errcode' => 200001,'errmsg' => 'Http请求错误:-> '.substr($e->getMessage(),0,strpos($e->getMessage()," (")),];
+                return ['errcode' => 200001,'errmsg' => '(Dingtalk.php)Http请求错误:-> '.substr($e->getMessage(),0,strpos($e->getMessage()," (")),];
             }
         }
     }
 
-    /**
-     * 刷新AccessToken行为
+    /** 刷新AccessToken行为
      * @param   string  $appkey     应用的唯一标识。
      * @return  array               ["errcode", "errmsg", "accesstoken"=>"...", "expires"=>...]
      */
     public function getRefresh(string $appkey = '')
     {
-        try {
-            $keySecret = $this->getKeySecretList();
-            if ( is_array($keySecret) && array_key_exists('errcode', $keySecret) && $keySecret['errcode'] == 0 ) {
-                if ( empty($appkey) ) {
-                    //刷新所有AccessToken
-                    foreach ($keySecret['lists'] as $appkey => $appsecret) {
-                        if (Cache::has('DingTalk_AccessToken_'.$appkey)) {
-                            $rs = Cache::get('DingTalk_AccessToken_'.$appkey);
-                            if ( $rs['expires'] <= time() ) {
-                                $this->refreshAccessToken($appkey,$appsecret);
-                            }
-                        } else {
+        $keySecret = $this->getKeySecretList();
+        if ( is_array($keySecret) && array_key_exists('errcode', $keySecret) && $keySecret['errcode'] == 0 ) {
+            if ( empty($appkey) ) {
+                //刷新所有AccessToken
+                foreach ($keySecret['lists'] as $appkey => $appsecret) {
+                    if (Cache::has('DingTalk_AccessToken_'.$appkey)) {
+                        $rs = Cache::get('DingTalk_AccessToken_'.$appkey);
+                        if ( $rs['expires'] <= time() ) {
                             $this->refreshAccessToken($appkey,$appsecret);
                         }
-                    }
-                } else {
-                    if (array_key_exists($appkey, $keySecret['lists'])) {
-                        $rat = $this->refreshAccessToken($appkey,$keySecret['lists'][$appkey]);
-                        if ( $rat['errcode'] == 0 ) {
-                            return $rat;
-                        } else {
-                            throw new DingTalkException($rat['errmsg'],$rat['errcode']);
-                        }
                     } else {
-                        throw new DingTalkException('无该AppKey项对应配置信息',210002);
+                        $this->refreshAccessToken($appkey,$appsecret);
                     }
                 }
             } else {
-                throw new DingTalkException('获取Appkey和AppSecret列表失败',210005);
+                if (array_key_exists($appkey, $keySecret['lists'])) {
+                    return $this->refreshAccessToken($appkey,$keySecret['lists'][$appkey]);
+                } else {
+                    return ['errcode' => 210002,'errmsg' => '无该AppKey项对应配置信息'];
+                }
             }
-        } catch (DingTalkException $e) {
-            return $e->arrayErrorMessage();
+        } else {
+            return ['errcode' => 210005,'errmsg' => '获取Appkey和AppSecret列表失败'];
         }
     }
 
-    /**
-     * 获取AccessToken
+    /** 获取AccessToken
      * @param   string  $appkey     钉钉应用的唯一标识key。
      * @return  array               ["errcode", "errmsg", "accesstoken"=>"...", "expires"=>...]
      */
@@ -124,8 +111,7 @@ class Dingtalk
         }
     }
 
-    /**
-     * 获取通讯录权限范围
+    /** 获取通讯录权限范围
      * @param   string  $appkey     钉钉应用的唯一标识key。
      * @return  array               ['errcode','errmsg', 'auth_user_field' => [...], 'auth_org_scopes' => ['authed_user' => [...], 'authed_dept' => [...]]]
      */
@@ -154,10 +140,7 @@ class Dingtalk
 
 
 #region 未完成代码
-
-
-    /**
-     * 返回{appkey => appsecret}数组列表
+    /** 返回{appkey => appsecret}数组列表
      * @param   string  $appkey     应用的唯一标识。
      * @return array   ["errcode", "errmsg", "lists"=>["appkey1"=> "appsecret1","appkey2"=> "appsecret2"]]
      */
@@ -182,7 +165,10 @@ class Dingtalk
                 ];
                 break; 
             default:
-                throw new DingTalkException('未知的配置方式',210004);
+                return [
+                    "errcode" => 210004,
+                    "errmsg" => "未知的配置方式"
+                ];
                 break;
         }      
     }
@@ -197,36 +183,18 @@ class Dingtalk
     /**
      * ABRole.php   角色管理
      * 文档网址：https://ding-doc.dingtalk.com/document#/org-dev-guide/list-roles
+     * @param   string  $appkey     钉钉应用的唯一标识key。
+     * @return  array||class        array=>['errcode','errmsg']
      */
-    /*
     public function classRole(string $appkey)
     {
-        try {  
-            $token = $this->getAccessToken($appkey);
-            if ( is_array($token) && array_key_exists('errcode',$token) && $token['errcode'] == '0' ) {
-                return new ABRole($token['accesstoken'],$this->httpClient);
-            } else {
-                throw new DingTalkException('未知的配置方式',210004);
-            }
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
-    }
-    /**
-     * ABEmployee.php   用户管理
-     * 文档网址：https://ding-doc.dingtalk.com/document#/org-dev-guide/create-a-user-v2
-     */
-    /*
-    public function classEmployee(string $appkey)
-    {
         $token = $this->getAccessToken($appkey);
-        if ( is_array($token) && array_key_exists('errcode',$token) && $token['errcode'] == '0' ) {
-            return new ABEmployee($token['accesstoken'],$this->httpClient);
+        if ( array_key_exists('errcode',$token) && $token['errcode'] == '0' ) {
+            return new ABRole($token['accesstoken'],$this->httpClient);
         } else {
-            throw new DingTalkException('未知的配置方式',210004);
+            return $token;
         }
     }
-    */
 #endregion
 
 

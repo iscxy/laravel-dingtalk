@@ -3,6 +3,7 @@
 namespace Iscxy\Dingtalk;
 
 use GuzzleHttp\Exception\ConnectException;
+use Iscxy\Dingtalk\Exceptions\DingTalkException;
 
 /**
  * 角色管理
@@ -25,25 +26,22 @@ class ABRole
         $this->apiurl = 'https://oapi.dingtalk.com';
     }
 
-    /**
-     * GET请求
-     * @param   string  $url    请求地址
-     * @return  array   ['errcode','errmsg', ...]
+    /** GET请求
+     * @param   string  $url        请求地址
+     * @return  array               ['errcode','errmsg', ...]
      */
     public function httpGet(string $url)
     {
         try {
             $rs = $this->httpClient->request('GET', $url);
             $rsa = json_decode($rs->getBody()->getContents(),true);
-            $rsa['errcode'] = 'DT_'.$rsa['errcode'];
             return $rsa;
         } catch (ConnectException $e) {
-            return ['errcode' => 200001,'errmsg' => 'Http请求错误:-> '.substr($e->getMessage(),0,strpos($e->getMessage()," (")),];
+            return ['errcode' => 200001,'errmsg' => '(ABRole.php)Http请求错误:-> '.substr($e->getMessage(),0,strpos($e->getMessage()," (")),];
         }
     }
 
-    /**
-     * POST请求
+    /** POST请求
      * @param   string  $url    请求地址
      * @param   array   $data   请求数据
      * @return  array   ['errcode','errmsg', ...]
@@ -53,15 +51,13 @@ class ABRole
         try {
             $rs = $this->httpClient->request('POST', $url, ['form_params' => $data]);
             $rsa = json_decode($rs->getBody()->getContents(),true);
-            $rsa['errcode'] = 'DT_'.$rsa['errcode'];
             return $rsa;
         } catch (ConnectException $e) {
-            return ['errcode' => 200001,'errmsg' => 'Http请求错误:-> '.substr($e->getMessage(),0,strpos($e->getMessage()," (")),];
+            return ['errcode' => 200001,'errmsg' => '(ABRole.php)Http请求错误:-> '.substr($e->getMessage(),0,strpos($e->getMessage()," (")),];
         }
     }
 
-    /**
-     * 获取角色列表
+    /** 获取角色列表
      * @param   int     $size       分页大小，默认值20，最大值200。
      * @param   int     $offset     偏移量，偏移量从0开始。
      * @return  array               ['errcode', 'errmsg', 'request_id', 'result'=>[...]]
@@ -74,8 +70,7 @@ class ABRole
         ]);
     }
 
-    /**
-     * 获取指定角色的员工列表
+    /** 获取指定角色的员工列表
      * @param   int     $role_id    角色ID
      * @param   int     $size       分页大小，默认值20，最大值200。
      * @param   int     $offset     偏移量，偏移量从0开始。
@@ -90,8 +85,7 @@ class ABRole
         ]);
     }
 
-    /**
-     * 获取角色组
+    /** 获取角色组
      * @param   int     $group_id   角色组的ID
      * @return  array               ['errcode', 'errmsg', 'request_id', 'result'=>[...]]
      */
@@ -102,8 +96,7 @@ class ABRole
         ]);
     }
 
-    /**
-     * 获取角色详情
+    /** 获取角色详情
      * @param   int     $roleId     角色ID
      * @return  array               ['errcode', 'errmsg', 'request_id', 'result'=>[...]]
      */
