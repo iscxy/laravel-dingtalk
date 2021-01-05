@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Config;
  * 部门管理
  * 文档网址：https://ding-doc.dingtalk.com/document#/org-dev-guide/create-a-department-v2
  */
-class DtDepartment
+class DtDepartment_1111111
 {
     protected $httpClient;
     protected $accessToken;

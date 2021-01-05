@@ -157,7 +157,6 @@ class Dingtalk
                 ];
                 break;
             case 'database':
-                // $this->Monolog->ERROR('缓存中没有这个AppKey对应的AccessToken');
                 return [
                     "errcode" => 0,
                     "errmsg" => "ok",

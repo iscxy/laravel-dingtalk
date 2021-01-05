@@ -9,7 +9,7 @@ use GuzzleHttp\Exception\ConnectException;
  * 外部联系人
  * 文档网址：https://ding-doc.dingtalk.com/document#/org-dev-guide/extcontact-create
  */
-class DtExtcontact
+class DtExtcontact_11111111
 {
     protected $httpClient;
     protected $accessToken;

@@ -107,8 +107,7 @@ class ABRole
         ]);
     }
 
-    /**
-     * 创建角色组
+    /** 创建角色组
      * @param   string  $name       角色组名称
      * @return  array               ['errcode', 'errmsg', 'groupId']
      */
@@ -119,8 +118,7 @@ class ABRole
         ]);
     }
 
-    /**
-     * 创建角色
+    /** 创建角色
      * @param   string  $roleName   角色名称
      * @param   int     $groupId    角色组ID
      * @return  array               ['errcode', 'errmsg', 'roleId']
@@ -133,8 +131,7 @@ class ABRole
         ]);
     }
 
-    /**
-     * 批量增加员工角色
+    /** 批量增加员工角色
      * @param   string  $roleIds    角色roleId列表,多个roleId用英文逗号（,）分隔，最多可传20个。
      * @param   string  $userIds    员工的userId，多个userId用英文逗号（,）分隔，最多可传20个。
      * @return  array               ['errcode', 'errmsg', 'request_id']
@@ -147,8 +144,7 @@ class ABRole
         ]);
     }
 
-    /**
-     * 更新角色
+    /** 更新角色
      * @param   int     $roleId     角色ID
      * @param   string  $roleName   角色名称
      * @return  array               ['errcode', 'errmsg']
@@ -161,8 +157,7 @@ class ABRole
         ]);
     }
 
-    /**
-     * 删除角色
+    /** 删除角色
      * @param   int     $role_id     角色ID
      * @return  array               ['errcode', 'errmsg', 'request_id']
      */
@@ -173,8 +168,7 @@ class ABRole
         ]);
     }
 
-    /**
-     * 批量删除员工角色
+    /** 批量删除员工角色
      * @param   string  $roleIds    角色roleId列表,多个roleId用英文逗号（,）分隔，最多可传20个。
      * @param   string  $userIds    员工的userId，多个userId用英文逗号（,）分隔，最多可传20个。
      * @return  array               ['errcode', 'errmsg', 'request_id']
@@ -187,8 +181,7 @@ class ABRole
         ]);
     }
 
-    /**
-     * 设定角色成员管理范围
+    /** 设定角色成员管理范围
      * @param   string  $userid     员工在企业中的userid
      * @param   int     $role_id    角色ID。
      * @param   array   $dept_ids   部门ID列表数。最多50个，不传则设置范围为所有人
